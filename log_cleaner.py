@@ -8,7 +8,7 @@ LOG_FILES = [
 ]
 
 MAX_SIZE_BYTES = 50 * 1024 * 1024  # Truncate if larger than 50MB
-CLEAN_INTERVAL = 3600               # Run every 1 hour
+CLEAN_INTERVAL = 300                # Run every 5 minutes (300 seconds)
 
 def truncate_log(file_path):
     if os.path.exists(file_path):
