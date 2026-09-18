@@ -35,7 +35,7 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ima0hw/hitogami1:latest
-            ima0hw/hitogami1:${{ github.sha }}
+            ima0hw/hito:latest
+            ima0hw/hito:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
