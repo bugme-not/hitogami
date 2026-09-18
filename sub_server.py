@@ -6,7 +6,6 @@ PORT = 8000
 SECRET_PATH = "/sub"
 
 CONFIG = {
-    "default_domain": "app-analytics-services.com",
     "port": 443,
     "uuid": "cxlvin777",
     "password": "Cxlvin777",
@@ -14,94 +13,98 @@ CONFIG = {
 }
 
 def extract_run_app_host(host_header):
-    """Extracts host without port from HTTP Host header for authority."""
+    """Extracts host without port from HTTP Host header for authority/host."""
     if host_header:
         return host_header.split(':')[0]
     return "example.run.app"
 
 def generate_subscription(host_header):
     run_app_host = extract_run_app_host(host_header)
-    fixed_address = "app-analytics-services.com"
     port = CONFIG["port"]
     uuid = CONFIG["uuid"]
     pwd = CONFIG["password"]
     ss_credentials = base64.b64encode(f"{CONFIG['ss_method']}:{pwd}".encode()).decode()
 
-    vmess_base = {
-        "v": "2",
-        "add": fixed_address,
-        "port": str(port),
-        "id": uuid,
-        "aid": "0",
-        "scy": "auto",
-        "tls": "tls",
-        "sni": fixed_address,
-        "alpn": "h2,http/1.1",
-        "fp": "chrome"
-    }
-
     links = []
 
     # 1. gRPC NODES
+    # Address: firebase-settings.crashlytics.com | SNI: firebase-settings.crashlytics.com | ALPN: none
+    grpc_addr = "firebase-settings.crashlytics.com"
+    grpc_sni = "firebase-settings.crashlytics.com"
+
     links.append(
-        f"vless://{uuid}@{fixed_address}:{port}?mode=gun&security=tls&alpn=h2%2Chttp%2F1.1&encryption=none&insecure=0&fp=chrome&type=grpc&serviceName=cxlvinvl-grpc&authority={run_app_host}&allowInsecure=0&sni={fixed_address}#vless-grpc"
+        f"vless://{uuid}@{grpc_addr}:{port}?mode=gun&security=tls&encryption=none&insecure=0&fp=chrome&type=grpc&serviceName=cxlvinvl-grpc&authority={run_app_host}&allowInsecure=0&sni={grpc_sni}#vless-grpc"
     )
     links.append(
-        f"trojan://{pwd}@{fixed_address}:{port}?mode=gun&security=tls&alpn=h2%2Chttp%2F1.1&insecure=0&fp=chrome&type=grpc&serviceName=cxlvintr-grpc&authority={run_app_host}&allowInsecure=0&sni={fixed_address}#trojan-grpc"
+        f"trojan://{pwd}@{grpc_addr}:{port}?mode=gun&security=tls&insecure=0&fp=chrome&type=grpc&serviceName=cxlvintr-grpc&authority={run_app_host}&allowInsecure=0&sni={grpc_sni}#trojan-grpc"
     )
-    vmess_grpc = vmess_base.copy()
-    vmess_grpc.update({
-        "ps": "vmess-grpc",
-        "net": "grpc",
-        "type": "gun",
-        "path": "cxlvinvm-grpc",
-        "host": run_app_host
-    })
+    vmess_grpc = {
+        "v": "2", "ps": "vmess-grpc", "add": grpc_addr, "port": str(port), "id": uuid, "aid": "0", "scy": "auto",
+        "net": "grpc", "type": "gun", "path": "cxlvinvm-grpc", "host": run_app_host, "tls": "tls", "sni": grpc_sni, "fp": "chrome"
+    }
     links.append("vmess://" + base64.b64encode(json.dumps(vmess_grpc).encode()).decode())
     links.append(
-        f"ss://{ss_credentials}@{fixed_address}:{port}?mode=gun&security=tls&alpn=h2%2Chttp%2F1.1&insecure=0&fp=chrome&type=grpc&serviceName=cxlvinss-grpc&authority={run_app_host}&allowInsecure=0&sni={fixed_address}#ss-grpc"
+        f"ss://{ss_credentials}@{grpc_addr}:{port}?mode=gun&security=tls&insecure=0&fp=chrome&type=grpc&serviceName=cxlvinss-grpc&authority={run_app_host}&allowInsecure=0&sni={grpc_sni}#ss-grpc"
     )
 
     # 2. WEBSOCKET NODES
+    # Address: firebaseremoteconfigrealtime.googleapis.com | SNI: firebaseremoteconfigrealtime.googleapis.com | ALPN: none
+    ws_addr = "firebaseremoteconfigrealtime.googleapis.com"
+    ws_sni = "firebaseremoteconfigrealtime.googleapis.com"
+
     links.append(
-        f"vless://{uuid}@{fixed_address}:{port}?encryption=none&type=ws&headerType=none&path=%2FCxlvinVlWS%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinVlWS%20v6"
+        f"vless://{uuid}@{ws_addr}:{port}?encryption=none&type=ws&headerType=none&path=%2FCxlvinVlWS%3Fed%3D2560&security=tls&host={run_app_host}&sni={ws_sni}&fp=chrome#vless-ws"
     )
     links.append(
-        f"trojan://{pwd}@{fixed_address}:{port}?type=ws&headerType=none&path=%2FCxlvinTRWS%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinTRWS%20v6"
+        f"trojan://{pwd}@{ws_addr}:{port}?type=ws&headerType=none&path=%2FCxlvinTRWS%3Fed%3D2560&security=tls&host={run_app_host}&sni={ws_sni}&fp=chrome#trojan-ws"
     )
-    vmess_ws = vmess_base.copy()
-    vmess_ws.update({"ps": "CxlvinVMWS v6", "net": "ws", "type": "none", "host": run_app_host, "path": "/CxlvinVMWS?ed=2560"})
+    vmess_ws = {
+        "v": "2", "ps": "vmess-ws", "add": ws_addr, "port": str(port), "id": uuid, "aid": "0", "scy": "auto",
+        "net": "ws", "type": "none", "path": "/CxlvinVMWS?ed=2560", "host": run_app_host, "tls": "tls", "sni": ws_sni, "fp": "chrome"
+    }
     links.append("vmess://" + base64.b64encode(json.dumps(vmess_ws).encode()).decode())
     links.append(
-        f"ss://{ss_credentials}@{fixed_address}:{port}?type=ws&headerType=none&path=%2FCxlvinSSWS%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinSSWS%20v6"
+        f"ss://{ss_credentials}@{ws_addr}:{port}?type=ws&headerType=none&path=%2FCxlvinSSWS%3Fed%3D2560&security=tls&host={run_app_host}&sni={ws_sni}&fp=chrome#ss-ws"
     )
 
     # 3. HTTP UPGRADE NODES
+    # Address: fcmtoken.googleapis.com | SNI: fcmtoken.googleapis.com | ALPN: http/1.1
+    hu_addr = "fcmtoken.googleapis.com"
+    hu_sni = "fcmtoken.googleapis.com"
+
     links.append(
-        f"vless://{uuid}@{fixed_address}:{port}?encryption=none&type=httpupgrade&headerType=none&path=%2FCxlvinVlHU%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinVlHU%20v6"
+        f"vless://{uuid}@{hu_addr}:{port}?encryption=none&type=httpupgrade&headerType=none&path=%2FCxlvinVlHU%3Fed%3D2560&security=tls&alpn=http%2F1.1&host={run_app_host}&sni={hu_sni}&fp=chrome#vless-hu"
     )
     links.append(
-        f"trojan://{pwd}@{fixed_address}:{port}?type=httpupgrade&headerType=none&path=%2FCxlvinTRHU%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinTRHU%20v6"
+        f"trojan://{pwd}@{hu_addr}:{port}?type=httpupgrade&headerType=none&path=%2FCxlvinTRHU%3Fed%3D2560&security=tls&alpn=http%2F1.1&host={run_app_host}&sni={hu_sni}&fp=chrome#trojan-hu"
     )
-    vmess_hu = vmess_base.copy()
-    vmess_hu.update({"ps": "CxlvinVMHU v6", "net": "httpupgrade", "type": "none", "host": run_app_host, "path": "/CxlvinVMHU?ed=2560"})
+    vmess_hu = {
+        "v": "2", "ps": "vmess-hu", "add": hu_addr, "port": str(port), "id": uuid, "aid": "0", "scy": "auto",
+        "net": "httpupgrade", "type": "none", "path": "/CxlvinVMHU?ed=2560", "host": run_app_host, "tls": "tls", "sni": hu_sni, "alpn": "http/1.1", "fp": "chrome"
+    }
     links.append("vmess://" + base64.b64encode(json.dumps(vmess_hu).encode()).decode())
     links.append(
-        f"ss://{ss_credentials}@{fixed_address}:{port}?type=httpupgrade&headerType=none&path=%2FCxlvinSSHU%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinSSHU%20v6"
+        f"ss://{ss_credentials}@{hu_addr}:{port}?type=httpupgrade&headerType=none&path=%2FCxlvinSSHU%3Fed%3D2560&security=tls&alpn=http%2F1.1&host={run_app_host}&sni={hu_sni}&fp=chrome#ss-hu"
     )
 
     # 4. XHTTP NODES
+    # Address: app-analytics-services.com | SNI: cdn-settings.appsflyersdk.com | ALPN: h2
+    xh_addr = "app-analytics-services.com"
+    xh_sni = "cdn-settings.appsflyersdk.com"
+
     links.append(
-        f"vless://{uuid}@{fixed_address}:{port}?encryption=none&type=xhttp&headerType=stream-one&path=%2FCxlvinVlXH%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinVlXH%20v6"
+        f"vless://{uuid}@{xh_addr}:{port}?encryption=none&type=xhttp&headerType=stream-one&path=%2FCxlvinVlXH%3Fed%3D2560&security=tls&alpn=h2&host={run_app_host}&sni={xh_sni}&fp=chrome#vless-xhttp"
     )
     links.append(
-        f"trojan://{pwd}@{fixed_address}:{port}?type=xhttp&headerType=stream-one&path=%2FCxlvinTRXH%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinTRXH%20v6"
+        f"trojan://{pwd}@{xh_addr}:{port}?type=xhttp&headerType=stream-one&path=%2FCxlvinTRXH%3Fed%3D2560&security=tls&alpn=h2&host={run_app_host}&sni={xh_sni}&fp=chrome#trojan-xhttp"
     )
-    vmess_xh = vmess_base.copy()
-    vmess_xh.update({"ps": "CxlvinVMXH v6", "net": "xhttp", "type": "stream-one", "host": run_app_host, "path": "/CxlvinVMXH?ed=2560"})
+    vmess_xh = {
+        "v": "2", "ps": "vmess-xhttp", "add": xh_addr, "port": str(port), "id": uuid, "aid": "0", "scy": "auto",
+        "net": "xhttp", "type": "stream-one", "path": "/CxlvinVMXH?ed=2560", "host": run_app_host, "tls": "tls", "sni": xh_sni, "alpn": "h2", "fp": "chrome"
+    }
     links.append("vmess://" + base64.b64encode(json.dumps(vmess_xh).encode()).decode())
     links.append(
-        f"ss://{ss_credentials}@{fixed_address}:{port}?type=xhttp&headerType=stream-one&path=%2FCxlvinSSXH%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinSSXH%20v6"
+        f"ss://{ss_credentials}@{xh_addr}:{port}?type=xhttp&headerType=stream-one&path=%2FCxlvinSSXH%3Fed%3D2560&security=tls&alpn=h2&host={run_app_host}&sni={xh_sni}&fp=chrome#ss-xhttp"
     )
 
     raw_payload = "\n".join(links)
