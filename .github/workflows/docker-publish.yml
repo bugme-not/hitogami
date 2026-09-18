@@ -35,7 +35,7 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: |
-            ima0hw/hiton:latest
-            ima0hw/hiton:${{ github.sha }}
+            ima0hw/hitong:latest
+            ima0hw/hitong:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
