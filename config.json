@@ -324,7 +324,7 @@
         "network": "xhttp",
         "xhttpSettings": {
           "path": "/CxlvinTRXH",
-          "mode": "packet-up"
+          "mode": "auto"
         },
         "sockopt": {
           "tcpFastOpen": true,
@@ -361,7 +361,7 @@
         "network": "xhttp",
         "xhttpSettings": {
           "path": "/CxlvinVlXH",
-          "mode": "packet-up"
+          "mode": "auto"
         },
         "sockopt": {
           "tcpFastOpen": true,
