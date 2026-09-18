@@ -92,10 +92,10 @@ def generate_subscription(host_header):
 
     # 4. XHTTP NODES
     links.append(
-        f"vless://{uuid}@{fixed_address}:{port}?encryption=none&type=xhttp&headerType=packet-up&path=%2FCxlvinVlXH%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinVlXH%20v6"
+        f"vless://{uuid}@{fixed_address}:{port}?encryption=none&type=xhttp&headerType=auto&path=%2FCxlvinVlXH%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinVlXH%20v6"
     )
     links.append(
-        f"trojan://{pwd}@{fixed_address}:{port}?type=xhttp&headerType=packet-up&path=%2FCxlvinTRXH%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinTRXH%20v6"
+        f"trojan://{pwd}@{fixed_address}:{port}?type=xhttp&headerType=auto&path=%2FCxlvinTRXH%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinTRXH%20v6"
     )
     vmess_xh = vmess_base.copy()
     vmess_xh.update({"ps": "CxlvinVMXH v6", "net": "xhttp", "type": "packet-up", "host": run_app_host, "path": "/CxlvinVMXH?ed=2560"})
