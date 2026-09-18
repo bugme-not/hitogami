@@ -83,7 +83,7 @@
       "port": 10010, "listen": "::", "protocol": "trojan", "tag": "trojan-xh",
       "settings": {"clients": [{"password": "Cxlvin777"}]},
       "streamSettings": {
-        "network": "xhttp", "xhttpSettings": {"path": "/CxlvinTRXH", "mode": "auto"},
+        "network": "xhttp", "xhttpSettings": {"path": "/CxlvinTRXH", "mode": "stream-one"},
         "sockopt": {"tcpFastOpen": true, "tcpNoDelay": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 30, "tcpKeepAliveCount": 3, "tcpQuickAck": true, "tcpcongestion": "bbr"}
       },
       "sniffing": {"enabled": true, "destOverride": ["http", "tls", "fakedns"]}
@@ -92,7 +92,7 @@
       "port": 10009, "listen": "::", "protocol": "vless", "tag": "vless-xh",
       "settings": {"clients": [{"id": "cxlvin777"}], "decryption": "none"},
       "streamSettings": {
-        "network": "xhttp", "xhttpSettings": {"path": "/CxlvinVlXH", "mode": "auto"},
+        "network": "xhttp", "xhttpSettings": {"path": "/CxlvinVlXH", "mode": "stream-one"},
         "sockopt": {"tcpFastOpen": true, "tcpNoDelay": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 30, "tcpKeepAliveCount": 3, "tcpQuickAck": true, "tcpcongestion": "bbr"}
       },
       "sniffing": {"enabled": true, "destOverride": ["http", "tls", "fakedns"]}
@@ -101,7 +101,7 @@
       "port": 10012, "listen": "::", "protocol": "shadowsocks", "tag": "shadowsocks-xh",
       "settings": {"clients": [{"password": "Cxlvin777", "method": "chacha20-ietf-poly1305"}]},
       "streamSettings": {
-        "network": "xhttp", "xhttpSettings": {"path": "/CxlvinSSXH", "mode": "auto"},
+        "network": "xhttp", "xhttpSettings": {"path": "/CxlvinSSXH", "mode": "stream-one"},
         "sockopt": {"tcpFastOpen": true, "tcpNoDelay": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 30, "tcpKeepAliveCount": 3, "tcpQuickAck": true, "tcpcongestion": "bbr"}
       },
       "sniffing": {"enabled": true, "destOverride": ["http", "tls", "fakedns"]}
@@ -110,10 +110,8 @@
       "port": 10011, "listen": "::", "protocol": "vmess", "tag": "vmess-xh",
       "settings": {"clients": [{"id": "cxlvin777", "alterId": 0, "security": "auto"}]},
       "streamSettings": {
-        "network": "xhttp", "xhttpSettings": {"path": "/CxlvinVMXH", "mode": "auto"},
+        "network": "xhttp", "xhttpSettings": {"path": "/CxlvinVMXH", "mode": "stream-one"},
         "sockopt": {"tcpFastOpen": true, "tcpNoDelay": true, "tcpKeepAliveInterval": 15, "tcpKeepAliveIdle": 30, "tcpKeepAliveCount": 3, "tcpQuickAck": true, "tcpcongestion": "bbr"}
-      },
-      "sniffing": {"enabled": true, "destOverride": ["http", "tls", "fakedns"]}
     },
     {
       "port": 12001, "listen": "::", "protocol": "trojan", "tag": "trojan-grpc",
