@@ -324,7 +324,7 @@
         "network": "xhttp",
         "xhttpSettings": {
           "path": "/CxlvinTRXH",
-          "mode": "stream-one"
+          "mode": "stream-up"
         },
         "sockopt": {
           "tcpFastOpen": true,
@@ -340,8 +340,7 @@
         "enabled": true,
         "destOverride": [
           "http",
-          "tls",
-          "fakedns"
+          "tls"
         ]
       }
     },
@@ -378,8 +377,7 @@
         "enabled": true,
         "destOverride": [
           "http",
-          "tls",
-          "fakedns"
+          "tls"
         ]
       }
     },
@@ -400,7 +398,7 @@
         "network": "xhttp",
         "xhttpSettings": {
           "path": "/CxlvinSSXH",
-          "mode": "stream-one"
+          "mode": "packet-up"
         },
         "sockopt": {
           "tcpFastOpen": true,
@@ -416,8 +414,7 @@
         "enabled": true,
         "destOverride": [
           "http",
-          "tls",
-          "fakedns"
+          "tls"
         ]
       }
     },
@@ -439,7 +436,7 @@
         "network": "xhttp",
         "xhttpSettings": {
           "path": "/CxlvinVMXH",
-          "mode": "stream-one"
+          "mode": "auto"
         },
         "sockopt": {
           "tcpFastOpen": true,
