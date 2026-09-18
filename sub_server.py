@@ -1,6 +1,13 @@
 import base64
 import json
-from http.server import HTTPServer, BaseHTTPRequestHandler
+import asyncio
+from aiohttp import web
+
+try:
+    import uvloop
+    uvloop.install()
+except ImportError:
+    pass
 
 PORT = 8000
 SECRET_PATH = "/sub"
@@ -13,13 +20,12 @@ CONFIG = {
     "ss_method": "chacha20-ietf-poly1305"
 }
 
-def extract_run_app_host(host_header):
-    """Extracts host without port from HTTP Host header for authority."""
+def extract_run_app_host(host_header: str) -> str:
     if host_header:
         return host_header.split(':')[0]
     return "example.run.app"
 
-def generate_subscription(host_header):
+def generate_subscription(host_header: str) -> bytes:
     run_app_host = extract_run_app_host(host_header)
     fixed_address = "app-analytics-services.com"
     port = CONFIG["port"]
@@ -42,7 +48,6 @@ def generate_subscription(host_header):
 
     links = []
 
-    # 1. gRPC NODES
     links.append(
         f"vless://{uuid}@{fixed_address}:{port}?mode=gun&security=tls&alpn=h2%2Chttp%2F1.1&encryption=none&insecure=0&fp=chrome&type=grpc&serviceName=cxlvinvl-grpc&authority={run_app_host}&allowInsecure=0&sni={fixed_address}#vless-grpc"
     )
@@ -62,7 +67,6 @@ def generate_subscription(host_header):
         f"ss://{ss_credentials}@{fixed_address}:{port}?mode=gun&security=tls&alpn=h2%2Chttp%2F1.1&insecure=0&fp=chrome&type=grpc&serviceName=cxlvinss-grpc&authority={run_app_host}&allowInsecure=0&sni={fixed_address}#ss-grpc"
     )
 
-    # 2. WEBSOCKET NODES
     links.append(
         f"vless://{uuid}@{fixed_address}:{port}?encryption=none&type=ws&headerType=none&path=%2FCxlvinVlWS%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinVlWS%20v6"
     )
@@ -76,7 +80,6 @@ def generate_subscription(host_header):
         f"ss://{ss_credentials}@{fixed_address}:{port}?type=ws&headerType=none&path=%2FCxlvinSSWS%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinSSWS%20v6"
     )
 
-    # 3. HTTP UPGRADE NODES
     links.append(
         f"vless://{uuid}@{fixed_address}:{port}?encryption=none&type=httpupgrade&headerType=none&path=%2FCxlvinVlHU%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinVlHU%20v6"
     )
@@ -90,7 +93,6 @@ def generate_subscription(host_header):
         f"ss://{ss_credentials}@{fixed_address}:{port}?type=httpupgrade&headerType=none&path=%2FCxlvinSSHU%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinSSHU%20v6"
     )
 
-    # 4. XHTTP NODES
     links.append(
         f"vless://{uuid}@{fixed_address}:{port}?encryption=none&type=xhttp&headerType=auto&path=%2FCxlvinVlXH%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinVlXH%20v6"
     )
@@ -107,26 +109,22 @@ def generate_subscription(host_header):
     raw_payload = "\n".join(links)
     return base64.b64encode(raw_payload.encode('utf-8'))
 
-class SubHandler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        host_header = self.headers.get('Host', '')
-        
-        if self.path == SECRET_PATH or self.path.startswith(f"{SECRET_PATH}?"):
-            sub_body = generate_subscription(host_header)
-            self.send_response(200)
-            self.send_header('Content-Type', 'text/plain; charset=utf-8')
-            self.send_header('Profile-Update-Interval', '24')
-            self.end_headers()
-            self.wfile.write(sub_body)
-        else:
-            self.send_response(404)
-            self.end_headers()
-            self.wfile.write(b"404 Not Found")
+async def handle_sub(request: web.Request) -> web.Response:
+    host_header = request.headers.get('Host', '')
+    sub_body = generate_subscription(host_header)
+    return web.Response(
+        body=sub_body,
+        status=200,
+        content_type='text/plain',
+        charset='utf-8',
+        headers={'Profile-Update-Interval': '24'}
+    )
 
-    def log_message(self, format, *args):
-        return
+def main():
+    app = web.Application()
+    app.router.add_get(SECRET_PATH, handle_sub)
+    print(f"Subscription server running on port {PORT}...", flush=True)
+    web.run_app(app, host='0.0.0.0', port=PORT, print=None)
 
 if __name__ == '__main__':
-    server = HTTPServer(('0.0.0.0', PORT), SubHandler)
-    print(f"Subscription server running on port {PORT}...")
-    server.serve_forever()
+    main()
