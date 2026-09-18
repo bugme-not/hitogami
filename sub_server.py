@@ -92,16 +92,16 @@ def generate_subscription(host_header):
 
     # 4. XHTTP NODES
     links.append(
-        f"vless://{uuid}@{fixed_address}:{port}?encryption=none&type=xhttp&headerType=auto&path=%2FCxlvinVlXH%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinVlXH%20v6"
+        f"vless://{uuid}@{fixed_address}:{port}?encryption=none&type=xhttp&headerType=stream-one&path=%2FCxlvinVlXH%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinVlXH%20v6"
     )
     links.append(
-        f"trojan://{pwd}@{fixed_address}:{port}?type=xhttp&headerType=auto&path=%2FCxlvinTRXH%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinTRXH%20v6"
+        f"trojan://{pwd}@{fixed_address}:{port}?type=xhttp&headerType=stream-one&path=%2FCxlvinTRXH%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinTRXH%20v6"
     )
     vmess_xh = vmess_base.copy()
-    vmess_xh.update({"ps": "CxlvinVMXH v6", "net": "xhttp", "type": "auto", "host": run_app_host, "path": "/CxlvinVMXH?ed=2560"})
+    vmess_xh.update({"ps": "CxlvinVMXH v6", "net": "xhttp", "type": "stream-one", "host": run_app_host, "path": "/CxlvinVMXH?ed=2560"})
     links.append("vmess://" + base64.b64encode(json.dumps(vmess_xh).encode()).decode())
     links.append(
-        f"ss://{ss_credentials}@{fixed_address}:{port}?type=xhttp&headerType=auto&path=%2FCxlvinSSXH%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinSSXH%20v6"
+        f"ss://{ss_credentials}@{fixed_address}:{port}?type=xhttp&headerType=stream-one&path=%2FCxlvinSSXH%3Fed%3D2560&security=tls&host={run_app_host}#CxlvinSSXH%20v6"
     )
 
     raw_payload = "\n".join(links)
