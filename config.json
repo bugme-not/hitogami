@@ -324,7 +324,7 @@
         "network": "xhttp",
         "xhttpSettings": {
           "path": "/CxlvinTRXH",
-          "mode": "stream-one"
+          "mode": "auto"
         },
         "sockopt": {
           "tcpFastOpen": true,
@@ -361,7 +361,7 @@
         "network": "xhttp",
         "xhttpSettings": {
           "path": "/CxlvinVlXH",
-          "mode": "stream-one"
+          "mode": "auto"
         },
         "sockopt": {
           "tcpFastOpen": true,
@@ -398,7 +398,7 @@
         "network": "xhttp",
         "xhttpSettings": {
           "path": "/CxlvinSSXH",
-          "mode": "stream-one"
+          "mode": "auto"
         },
         "sockopt": {
           "tcpFastOpen": true,
@@ -436,7 +436,7 @@
         "network": "xhttp",
         "xhttpSettings": {
           "path": "/CxlvinVMXH",
-          "mode": "stream-one"
+          "mode": "auto"
         },
         "sockopt": {
           "tcpFastOpen": true,
