@@ -1,6 +1,3 @@
-# -----------------------------------------------------------------
-# Build Stage: Fetch Sing-Box binary dynamically
-# -----------------------------------------------------------------
 FROM alpine:3.20 AS singbox-bin
 
 RUN apk add --no-cache \
@@ -25,9 +22,6 @@ RUN ARCH=$(uname -m) && \
     chmod +x /usr/local/bin/sing-box && \
     rm -rf sing-box.tar.gz
 
-# -----------------------------------------------------------------
-# Final Stage: OpenResty + Sing-Box + Python Scripts
-# -----------------------------------------------------------------
 FROM openresty/openresty:alpine-fat
 
 ENV TZ=Asia/Shanghai
