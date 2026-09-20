@@ -48,9 +48,9 @@ def generate_subscription(host_header):
     )
 
     # 2. WEBSOCKET NODES
-    # Address: firebaseremoteconfigrealtime.googleapis.com | SNI: firebaseremoteconfigrealtime.googleapis.com | ALPN: none | FP: none
-    ws_addr = "firebaseremoteconfigrealtime.googleapis.com"
-    ws_sni = "firebaseremoteconfigrealtime.googleapis.com"
+    # Address: app-analytics-services.com | SNI: app-analytics-services.com | ALPN: none | FP: none
+    ws_addr = "app-analytics-services.com"
+    ws_sni = "app-analytics-services.com"
 
     links.append(
         f"vless://{uuid}@{ws_addr}:{port}?encryption=none&type=ws&headerType=none&path=%2FCxlvinVlWS%3Fed%3D2560&security=tls&host={run_app_host}&sni={ws_sni}#vless-ws"
@@ -88,9 +88,9 @@ def generate_subscription(host_header):
     )
 
     # 4. XHTTP NODES
-    # Address: app-analytics-services.com | SNI: cdn-settings.appsflyersdk.com | ALPN: h2 | FP: none
-    xh_addr = "app-analytics-services.com"
-    xh_sni = "cdn-settings.appsflyersdk.com"
+    # Address: firebaseremoteconfigrealtime.googleapis.com | SNI: firebaseremoteconfigrealtime.googleapis.com | ALPN: h2 | FP: none
+    xh_addr = "firebaseremoteconfigrealtime.googleapis.com"
+    xh_sni = "firebaseremoteconfigrealtime.googleapis.com"
 
     links.append(
         f"vless://{uuid}@{xh_addr}:{port}?encryption=none&type=xhttp&headerType=stream-one&path=%2FCxlvinVlXH%3Fed%3D2560&security=tls&alpn=h2&host={run_app_host}&sni={xh_sni}#vless-xhttp"
