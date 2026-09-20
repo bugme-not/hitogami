@@ -28,9 +28,29 @@ RUN apk add --no-cache \
     supervisor \
     python3 \
     py3-pip \
-    iptables
+    iptables \
+    openssh-server \
+    openssh-sftp-server
 
 WORKDIR /app
+
+# Configure SSH
+RUN mkdir -p /var/run/sshd \
+    && ssh-keygen -A \
+    && useradd -m -s /bin/bash cxlvin \
+    && echo 'cxlvin:cxlvin' | chpasswd
+
+RUN { \
+    echo "PermitRootLogin yes"; \
+    echo "PasswordAuthentication yes"; \
+    echo "UseDNS no"; \
+    echo "TCPKeepAlive yes"; \
+    echo "ClientAliveInterval 15"; \
+    echo "ClientAliveCountMax 3"; \
+    echo "MaxSessions 50"; \
+    echo "MaxStartups 50:30:100"; \
+    echo "Compression no"; \
+    } >> /etc/ssh/sshd_config
 
 # Copy Xray binary
 COPY --from=xray-bin /usr/local/bin/xray /usr/local/bin/xray
