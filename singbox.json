@@ -1,22 +1,8 @@
 {
   "log": {
     "level": "warn",
-    "timestamp": true
-  },
-  "dns": {
-    "servers": [
-      {
-        "tag": "dns-remote",
-        "address": "223.5.5.5",
-        "detour": "direct"
-      },
-      {
-        "tag": "dns-backup",
-        "address": "223.6.6.6",
-        "detour": "direct"
-      }
-    ],
-    "strategy": "ipv4_only"
+    "output": "stderr",
+    "timestamp": false
   },
   "inbounds": [
     {
@@ -29,14 +15,15 @@
           "password": "Cxlvin777"
         }
       ],
-      "transport": {
-        "type": "websocket",
-        "path": "/CxlvinTRWS"
-      },
       "multiplex": {
         "enabled": true,
-        "protocol": "smux",
         "padding": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/CxlvinTRWS",
+        "max_early_data": 2048,
+        "early_data_header_name": "Sec-WebSocket-Protocol"
       },
       "sniff": true,
       "sniff_override_destination": true
@@ -51,14 +38,15 @@
           "uuid": "cxlvin777"
         }
       ],
-      "transport": {
-        "type": "websocket",
-        "path": "/CxlvinVlWS"
-      },
       "multiplex": {
         "enabled": true,
-        "protocol": "smux",
         "padding": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/CxlvinVlWS",
+        "max_early_data": 2048,
+        "early_data_header_name": "Sec-WebSocket-Protocol"
       },
       "sniff": true,
       "sniff_override_destination": true
@@ -70,14 +58,15 @@
       "listen_port": 10003,
       "method": "chacha20-ietf-poly1305",
       "password": "Cxlvin777",
-      "transport": {
-        "type": "websocket",
-        "path": "/CxlvinSSWS"
-      },
       "multiplex": {
         "enabled": true,
-        "protocol": "smux",
         "padding": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/CxlvinSSWS",
+        "max_early_data": 2048,
+        "early_data_header_name": "Sec-WebSocket-Protocol"
       },
       "sniff": true,
       "sniff_override_destination": true
@@ -93,14 +82,15 @@
           "alterId": 0
         }
       ],
-      "transport": {
-        "type": "websocket",
-        "path": "/CxlvinVMWS"
-      },
       "multiplex": {
         "enabled": true,
-        "protocol": "smux",
         "padding": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/CxlvinVMWS",
+        "max_early_data": 2048,
+        "early_data_header_name": "Sec-WebSocket-Protocol"
       },
       "sniff": true,
       "sniff_override_destination": true
@@ -115,14 +105,13 @@
           "password": "Cxlvin777"
         }
       ],
+      "multiplex": {
+        "enabled": true,
+        "padding": true
+      },
       "transport": {
         "type": "httpupgrade",
         "path": "/CxlvinTRHU"
-      },
-      "multiplex": {
-        "enabled": true,
-        "protocol": "smux",
-        "padding": true
       },
       "sniff": true,
       "sniff_override_destination": true
@@ -137,14 +126,13 @@
           "uuid": "cxlvin777"
         }
       ],
+      "multiplex": {
+        "enabled": true,
+        "padding": true
+      },
       "transport": {
         "type": "httpupgrade",
         "path": "/CxlvinVlHU"
-      },
-      "multiplex": {
-        "enabled": true,
-        "protocol": "smux",
-        "padding": true
       },
       "sniff": true,
       "sniff_override_destination": true
@@ -156,14 +144,13 @@
       "listen_port": 11003,
       "method": "chacha20-ietf-poly1305",
       "password": "Cxlvin777",
+      "multiplex": {
+        "enabled": true,
+        "padding": true
+      },
       "transport": {
         "type": "httpupgrade",
         "path": "/CxlvinSSHU"
-      },
-      "multiplex": {
-        "enabled": true,
-        "protocol": "smux",
-        "padding": true
       },
       "sniff": true,
       "sniff_override_destination": true
@@ -179,14 +166,13 @@
           "alterId": 0
         }
       ],
+      "multiplex": {
+        "enabled": true,
+        "padding": true
+      },
       "transport": {
         "type": "httpupgrade",
         "path": "/CxlvinVMHU"
-      },
-      "multiplex": {
-        "enabled": true,
-        "protocol": "smux",
-        "padding": true
       },
       "sniff": true,
       "sniff_override_destination": true
@@ -201,15 +187,14 @@
           "password": "Cxlvin777"
         }
       ],
+      "multiplex": {
+        "enabled": true,
+        "padding": true
+      },
       "transport": {
         "type": "xhttp",
         "path": "/CxlvinTRXH",
         "mode": "auto"
-      },
-      "multiplex": {
-        "enabled": true,
-        "protocol": "smux",
-        "padding": true
       },
       "sniff": true,
       "sniff_override_destination": true
@@ -224,15 +209,14 @@
           "uuid": "cxlvin777"
         }
       ],
+      "multiplex": {
+        "enabled": true,
+        "padding": true
+      },
       "transport": {
         "type": "xhttp",
         "path": "/CxlvinVlXH",
         "mode": "auto"
-      },
-      "multiplex": {
-        "enabled": true,
-        "protocol": "smux",
-        "padding": true
       },
       "sniff": true,
       "sniff_override_destination": true
@@ -244,15 +228,14 @@
       "listen_port": 10012,
       "method": "chacha20-ietf-poly1305",
       "password": "Cxlvin777",
+      "multiplex": {
+        "enabled": true,
+        "padding": true
+      },
       "transport": {
         "type": "xhttp",
         "path": "/CxlvinSSXH",
         "mode": "auto"
-      },
-      "multiplex": {
-        "enabled": true,
-        "protocol": "smux",
-        "padding": true
       },
       "sniff": true,
       "sniff_override_destination": true
@@ -268,15 +251,14 @@
           "alterId": 0
         }
       ],
+      "multiplex": {
+        "enabled": true,
+        "padding": true
+      },
       "transport": {
         "type": "xhttp",
         "path": "/CxlvinVMXH",
         "mode": "auto"
-      },
-      "multiplex": {
-        "enabled": true,
-        "protocol": "smux",
-        "padding": true
       }
     },
     {
@@ -289,14 +271,13 @@
           "password": "Cxlvin777"
         }
       ],
+      "multiplex": {
+        "enabled": true,
+        "padding": true
+      },
       "transport": {
         "type": "grpc",
         "service_name": "cxlvintr-grpc"
-      },
-      "multiplex": {
-        "enabled": true,
-        "protocol": "smux",
-        "padding": true
       },
       "sniff": true,
       "sniff_override_destination": true
@@ -312,14 +293,13 @@
           "alterId": 0
         }
       ],
+      "multiplex": {
+        "enabled": true,
+        "padding": true
+      },
       "transport": {
         "type": "grpc",
         "service_name": "cxlvinvm-grpc"
-      },
-      "multiplex": {
-        "enabled": true,
-        "protocol": "smux",
-        "padding": true
       },
       "sniff": true,
       "sniff_override_destination": true
@@ -334,14 +314,13 @@
           "uuid": "cxlvin777"
         }
       ],
+      "multiplex": {
+        "enabled": true,
+        "padding": true
+      },
       "transport": {
         "type": "grpc",
         "service_name": "cxlvinvl-grpc"
-      },
-      "multiplex": {
-        "enabled": true,
-        "protocol": "smux",
-        "padding": true
       },
       "sniff": true,
       "sniff_override_destination": true
@@ -353,49 +332,30 @@
       "listen_port": 12004,
       "method": "chacha20-ietf-poly1305",
       "password": "Cxlvin777",
+      "multiplex": {
+        "enabled": true,
+        "padding": true
+      },
       "transport": {
         "type": "grpc",
         "service_name": "cxlvinss-grpc"
-      },
-      "multiplex": {
-        "enabled": true,
-        "protocol": "smux",
-        "padding": true
       }
     }
   ],
   "outbounds": [
     {
+      "tag": "direct",
       "type": "direct",
-      "tag": "direct"
-    },
-    {
-      "type": "block",
-      "tag": "block"
+      "domain_strategy": "AsIs",
+      "fallback_delay": "150ms"
     }
   ],
   "route": {
+    "final": "direct",
     "rules": [
       {
-        "inbound": [
-          "trojan-ws",
-          "vless-ws",
-          "shadowsocks-ws",
-          "vmess-ws",
-          "trojan-hu",
-          "vless-hu",
-          "shadowsocks-hu",
-          "vmess-hu",
-          "trojan-xh",
-          "vless-xh",
-          "shadowsocks-xh",
-          "vmess-xh",
-          "trojan-grpc",
-          "vmess-grpc",
-          "vless-grpc",
-          "ss-grpc"
-        ],
-        "outbound": "direct"
+        "ip_is_private": false,
+        "action": "reject"
       }
     ]
   }
